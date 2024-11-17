@@ -130,6 +130,43 @@ let quotes = JSON.parse(localStorage.getItem('quotes')) || [
     if (quotes.length > 0) {
       showRandomQuote(); // Display a random quote if available
     }
+    // Function to create and download a JSON file with the quotes
+function exportToJson() {
+    const blob = new Blob([JSON.stringify(quotes, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'quotes.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+// Function to import quotes from a JSON file
+function importFromJsonFile(event) {
+    const fileReader = new FileReader();
+    
+    // Event handler when the file is read successfully
+    fileReader.onload = function(event) {
+      try {
+        const importedQuotes = JSON.parse(event.target.result);  // Parse the JSON data
+        if (Array.isArray(importedQuotes)) {
+          quotes.push(...importedQuotes);  // Add the imported quotes to the array
+          saveQuotes();  // Save updated quotes to localStorage
+          alert('Quotes imported successfully!');
+        } else {
+          alert('Invalid JSON file format!');
+        }
+      } catch (error) {
+        alert('Error importing quotes: ' + error.message);
+      }
+    };
+  
+    // Read the selected file as text
+    fileReader.readAsText(event.target.files[0]);
+  }
+// Event listeners for the import and export functionality
+document.getElementById('exportJson').addEventListener('click', exportToJson);
+document.getElementById('importFile').addEventListener('change', importFromJsonFile);    
   };
   
   
