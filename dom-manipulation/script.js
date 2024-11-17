@@ -1,18 +1,19 @@
 // script.js
 
-// Function to populate categories in the filter dropdown
+// Function to populate categories in the filter dropdown using map()
 function populateCategories() {
-    const categories = new Set();  // Use a Set to store unique categories
+    // Use map() to create an array of all categories from the quotes array
+    const allCategories = quotes.map(quote => quote.category);
 
-    // Loop through the quotes array and add each category to the Set
-    quotes.forEach(quote => categories.add(quote.category));
+    // Use filter() to remove duplicate categories (by creating a new Set)
+    const uniqueCategories = [...new Set(allCategories)];
 
     // Get the category filter dropdown and clear previous options
     const categoryFilter = document.getElementById('categoryFilter');
     categoryFilter.innerHTML = '<option value="all">All Categories</option>';  // Add the default option
 
-    // Loop through the Set and create a dropdown option for each unique category
-    categories.forEach(category => {
+    // Loop through the unique categories and create dropdown options
+    uniqueCategories.forEach(category => {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
