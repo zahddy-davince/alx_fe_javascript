@@ -8,31 +8,23 @@
 <body>
     <h1>Dynamic Quote Generator</h1>
 
-    <!-- Category Filter Dropdown -->
+    <!-- Category filter dropdown -->
     <select id="categoryFilter" onchange="filterQuotes()">
         <option value="all">All Categories</option>
-        <!-- Dynamically populated categories -->
+        <!-- Categories will be populated dynamically -->
     </select>
 
-    <div id="quoteDisplay">
-        <p id="quoteText"></p>
-        <p id="quoteCategory"></p>
-    </div>
+    <!-- Quote display section -->
+    <div id="quoteDisplay"></div>
 
-    <button id="newQuote">Show New Quote</button>
-
-    <!-- Buttons for Export and Import -->
-    <button id="exportJson">Export Quotes</button>
-    <input type="file" id="importFile" accept=".json" onchange="importFromJsonFile(event)" />
-
-    <div>
-        <input id="newQuoteText" type="text" placeholder="Enter a new quote" />
-        <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
-        <button onclick="addQuote()">Add Quote</button>
+    <!-- Conflict resolution notification -->
+    <div id="conflictNotification" style="display:none; background-color: yellow; padding: 10px; margin-top: 10px;">
+        <p>Data has been updated. Please refresh to sync.</p>
     </div>
 
     <script src="script.js"></script>
 </body>
 </html>
+
 
 
