@@ -9,38 +9,41 @@ let quotes = [
 ];
 
 // Function to simulate fetching quotes from a server (mock API)
-function fetchQuotesFromServer() {
-    return fetch('https://jsonplaceholder.typicode.com/posts')
-        .then(response => response.json())
-        .then(data => {
-            // Simulating server response containing quotes (for example)
-            return data.slice(0, 5).map(item => ({
-                id: item.id,
-                text: item.title, // Using title as quote text for this example
-                category: "General"
-            }));
-        })
-        .catch(error => console.error('Error fetching quotes from server:', error));
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        const data = await response.json();
+        
+        // Simulating server response containing quotes (for example)
+        return data.slice(0, 5).map(item => ({
+            id: item.id,
+            text: item.title, // Using title as quote text for this example
+            category: "General"
+        }));
+    } catch (error) {
+        console.error('Error fetching quotes from server:', error);
+    }
 }
 
 // Function to sync local quotes with the server (periodic sync)
-function syncQuotesWithServer() {
-    fetchQuotesFromServer().then(serverQuotes => {
-        // Check for conflicts and resolve by taking the server data
-        const localQuotes = JSON.parse(localStorage.getItem('quotes')) || quotes;
+async function syncQuotesWithServer() {
+    const serverQuotes = await fetchQuotesFromServer();
+    if (!serverQuotes) return; // If there was an error fetching, don't proceed
 
-        // Compare server quotes with local quotes
-        const updatedQuotes = resolveConflicts(localQuotes, serverQuotes);
+    // Check for conflicts and resolve by taking the server data
+    const localQuotes = JSON.parse(localStorage.getItem('quotes')) || quotes;
 
-        // Save the updated quotes to localStorage
-        localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
+    // Compare server quotes with local quotes
+    const updatedQuotes = resolveConflicts(localQuotes, serverQuotes);
 
-        // Show conflict resolution notification
-        showConflictNotification();
+    // Save the updated quotes to localStorage
+    localStorage.setItem('quotes', JSON.stringify(updatedQuotes));
 
-        // Update the UI with the latest quotes
-        displayQuotes(updatedQuotes);
-    });
+    // Show conflict resolution notification
+    showConflictNotification();
+
+    // Update the UI with the latest quotes
+    displayQuotes(updatedQuotes);
 }
 
 // Function to resolve conflicts between local and server quotes (server data takes precedence)
@@ -115,7 +118,7 @@ function displayQuotes(quotesToDisplay) {
 }
 
 // On page load, fetch and display quotes
-window.onload = function() {
+window.onload = async function() {
     // Fetch quotes from localStorage or default to sample data
     const storedQuotes = JSON.parse(localStorage.getItem('quotes')) || quotes;
     quotes = storedQuotes; // Use stored quotes
@@ -125,4 +128,5 @@ window.onload = function() {
     // Start syncing quotes with the server periodically (every 30 seconds)
     setInterval(syncQuotesWithServer, 30000); // Every 30 seconds
 };
+;
 
