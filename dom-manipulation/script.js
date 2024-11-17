@@ -1,35 +1,48 @@
 // script.js
 
 // Array to hold the quotes
-const quotes = [
-    { text: "The best way to predict the future is to invent it.", category: "Inspiration" },
-    { text: "Life is 10% what happens to us and 90% how we react to it.", category: "Motivation" },
-    { text: "Your time is limited, don't waste it living someone else's life.", category: "Life" }
-];
-
-// Function to display a random quote
-function showRandomQuote() {
-    const quoteDisplay = document.getElementById('quoteDisplay');
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const randomQuote = quotes[randomIndex];
-    quoteDisplay.innerHTML = `"${randomQuote.text}" - <strong>${randomQuote.category}</strong>`;
-}
-
-// Function to add a new quote
-function addQuote() {
-    const quoteText = document.getElementById('newQuoteText').value;
-    const quoteCategory = document.getElementById('newQuoteCategory').value;
-
-    if (quoteText && quoteCategory) {
-        quotes.push({ text: quoteText, category: quoteCategory });
-        document.getElementById('newQuoteText').value = '';
-        document.getElementById('newQuoteCategory').value = '';
-        alert('Quote added successfully!');
-    } else {
-        alert('Please enter both quote and category.');
+let quotes = [
+    { text: "The only limit to our realization of tomorrow is our doubts of today.", category: "Motivation" },
+    { text: "Life is what happens when you're busy making other plans.", category: "Life" },
+    { text: "The purpose of our lives is to be happy.", category: "Happiness" },
+  ];
+  
+  function showRandomQuote() {
+    if (quotes.length === 0) {
+      alert("No quotes available! Please add some quotes.");
+      return;
     }
-}
-
-// Event listeners
-document.getElementById('newQuote').addEventListener('click', showRandomQuote);
-document.getElementById('addQuoteButton').addEventListener('click', addQuote);
+    
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const selectedQuote = quotes[randomIndex];
+    
+    document.getElementById('quoteText').textContent = `"${selectedQuote.text}"`;
+    document.getElementById('quoteCategory').textContent = `Category: ${selectedQuote.category}`;
+  }
+  
+  function addQuote() {
+    const quoteText = document.getElementById('newQuoteText').value.trim();
+    const quoteCategory = document.getElementById('newQuoteCategory').value.trim();
+    
+    if (!quoteText || !quoteCategory) {
+      alert("Both quote and category are required!");
+      return;
+    }
+    
+    const newQuote = { text: quoteText, category: quoteCategory };
+    quotes.push(newQuote);
+  
+    document.getElementById('newQuoteText').value = "";
+    document.getElementById('newQuoteCategory').value = "";
+  
+    const quoteDisplay = document.getElementById('quoteDisplay');
+    quoteDisplay.innerHTML = `
+      <p id="quoteText">"${newQuote.text}"</p>
+      <p id="quoteCategory">Category: ${newQuote.category}</p>
+    `;
+  
+    alert("New quote added successfully!");
+  }
+  
+  document.getElementById('newQuote').addEventListener('click', showRandomQuote);
+  document.getElementById('addQuote').addEventListener('click', addQuote);
