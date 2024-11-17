@@ -76,4 +76,36 @@ window.onload = function() {
 
 // Event listener for category filter change
 document.getElementById('categoryFilter').addEventListener('change', filterQuotes);
+// Function to filter quotes based on the selected category
+function filterQuotes() {
+    const selectedCategory = document.getElementById('categoryFilter').value; // Get selected category
+    const quoteDisplay = document.getElementById('quoteDisplay'); // Reference to the quote display element
+    const filteredQuotes = selectedCategory === 'all' 
+        ? quotes 
+        : quotes.filter(quote => quote.category === selectedCategory); // Filter quotes based on category
+
+    // Clear previous quotes
+    quoteDisplay.innerHTML = '';
+
+    if (filteredQuotes.length > 0) {
+        const randomIndex = Math.floor(Math.random() * filteredQuotes.length);  // Pick a random quote from filtered list
+        const selectedQuote = filteredQuotes[randomIndex];
+
+        // Create and append the quote elements to the DOM
+        const quoteTextElement = document.createElement('p');
+        quoteTextElement.textContent = `"${selectedQuote.text}"`;
+        const quoteCategoryElement = document.createElement('p');
+        quoteCategoryElement.textContent = `Category: ${selectedQuote.category}`;
+        
+        quoteDisplay.appendChild(quoteTextElement);
+        quoteDisplay.appendChild(quoteCategoryElement);
+    } else {
+        const noQuoteElement = document.createElement('p');
+        noQuoteElement.textContent = "No quotes found in this category!";
+        quoteDisplay.appendChild(noQuoteElement);
+    }
+
+    // Save the selected category to localStorage
+    localStorage.setItem('lastCategory', selectedCategory);
+}
 
